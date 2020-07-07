@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  #all-game-card{
+    margin-bottom: 20px; 
+    margin-top: 5px;
+    
+    
+    
+  }
+  .card-img-top{
+    object-fit: cover;
+    object-position: center; /* Center the image within the element */
+    width: 700px;
+    height: 200px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 5px, 10px black;
+  }
+  #all-games-shadow{
+    border-radius: 15%;
+  }

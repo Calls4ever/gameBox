@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function(e){
-
+    fetchGames()
+    fetchUsers()
+    fetchUserGames()
+    
     document.addEventListener('click', function(e){
         
         if (e.target.matches('.played')){
@@ -37,10 +40,15 @@ document.addEventListener('DOMContentLoaded', function(e){
     
 })
 
+
 function fetchGames(){
     fetch('http://localhost:3000/api/v1/games')
     .then(response => response.json())
-    .then(games => renderGames(games))
+    .then(games => {
+        games.forEach(game => {
+            renderAllGames(game)
+        });
+        })
     .catch((error) => {
         console.log(error); 
     })
@@ -65,48 +73,20 @@ function fetchUserGames(){
     })
 }
 
-function renderGames(games){
-    const gameList = document.querySelector('.game-list')
-    console.log(games);
-    games.forEach(game => {
-        id = game.id
-        
-        name = game.name
-
-        rating = parseFloat(game.rating)
-
-        genre = game.genre
-
-        platform = game.platform
-
-        imgUrl = game.img_ur
-
-        link = game.link
-        
-        gameDiv = document.createElement('div')
-        gameDiv.innerHTML = `
-                <image src='${imgUrl}' style="width:150px;height:100px;"></image>
-                <p>${name}</p>
-                <p>Critics Rating: ${rating}</p>
-                <p>Genre: ${genre}</p>
-                <p>Platform: ${platform}</p>
-                <a href="${link}">Buy this Game</a>
-                
-                <form>
-                    <button class="played">Played?</button><br>
-                    <label for="hours">Hours Played:</label>
-                    <input type="number" id="hours" name="hours">
-                    <button class="update">Update</button><br>
-                    <button class="completed">Completed</button>
-                </form>
-        `
-        gameDiv.id = id
-        gameList.append(gameDiv)
-    })
+const renderAllGames=game=>{
+    console.log(game)
+    const container=document.querySelector('#all-games-container')
+    container.innerHTML +=`<div id='all-games-shadow' class="shadow p-3 mb-5 bg-white rounded">
+    <div class="card" id='all-game-card' style="width: 19rem; ">
+    <img src="${game.img_ur}" class="card-img-top" alt="${game.name} Poster">
+    <div class="card-body">
+      <h5 class="card-title">${game.name}</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a href="#" class="btn btn-primary">Play Game</a>
+    </div>
+  </div>
+  </div` 
 }
 
-fetchGames()
-fetchUsers()
-fetchUserGames()
-renderGames()
+
 
