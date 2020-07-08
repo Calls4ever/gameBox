@@ -13,13 +13,6 @@ document.addEventListener('DOMContentLoaded', function(e){
     })
     
     
-    // document.querySelector('#inlineFormCustomSelectPref').addEventListener("change", function(e){
-    //     console.log(e.target);
-        
-    // })
-
-
-    
     document.addEventListener('click', function(e){
         
         if (e.target.matches('.btn-primary')){
@@ -29,29 +22,10 @@ document.addEventListener('DOMContentLoaded', function(e){
             gameId = button.id
             addUserGame(userId, gameId)
         }
-        else if (e.target.matches('.completed')){
-            e.preventDefault()
-            button = e.target
-            button.parentNode.innerHTML = `
-                <form>
-                    <label for="hours">Hours Played:</label>
-                    <input type="number" id="hours" name="hours">
-                    <button class="update">Update</button><br>
-                    <h4>You've completed this game!</h4>
-                </form>    
-            `
-        }
-        else if (e.target.matches('.update')){
-            e.preventDefault()
-            button = e.target
-            game = button.parentNode
-            updateHours(game)
-        }
         else if (e.target.matches('#all-games')){
             container = document.querySelector('#all-games-container')
             container.innerHTML = ``
-            fetchGames()
-            
+            fetchGames()    
         }
         else if (e.target.matches('#search')){
             e.preventDefault()
@@ -79,6 +53,11 @@ document.addEventListener('DOMContentLoaded', function(e){
             container = document.querySelector('#all-games-container')
             container.innerHTML = ``
             fetchGames()
+        }
+        else if (e.target.matches('.btn-danger')){
+            button = e.target
+            gameId = button.id
+            removeUserGame(gameId)
         }
     })
     
@@ -113,12 +92,9 @@ function fetchUserGames(userId){
         userGames.forEach(userGame=>{
             
             if(userGame.user_id==userId){
-                console.log(userGame)
-            
                 fetchGame(userGame.game_id, userGame)
             }
-        }
-        )
+        })
     })
     .catch((error) => {
         console.log(error);
@@ -127,7 +103,6 @@ function fetchUserGames(userId){
 }
 
 const renderAllGames=game=>{
-    // console.log(game)
     const container=document.querySelector('#all-games-container')
     container.innerHTML +=`<div id='all-games-shadow' class="shadow p-3 mb-5 bg-white rounded">
     <div class="card" id='all-game-card' style="width: 18rem; ">
@@ -170,7 +145,6 @@ const showRating=rating=>{
 }
 
 const fetchGame=(id, userGame)=>{
-    console.log(id)
     fetch(`http://localhost:3000/api/v1/games/${id}`)
     .then(res=>res.json())
     .then(game=>{
@@ -181,7 +155,7 @@ const fetchGame=(id, userGame)=>{
 const renderGame=(game, userGame)=>{
     
     const container=document.querySelector('#all-games-container')
-    container.innerHTML +=`<div id='all-games-shadow' class="shadow p-3 mb-5 bg-white rounded">
+    container.innerHTML +=`<div id="${userGame.id}" class="shadow p-3 mb-5 bg-white rounded">
     <div class="card" id='all-game-card' style="width: 18rem; ">
     <img src="${game.img_ur}" class="card-img-top" alt="${game.name} Poster">
     <div class="card-body">
@@ -211,7 +185,7 @@ const renderGame=(game, userGame)=>{
     </div>
   </div>
   </div` 
-  
+    
 }
 function renderAllUsers(users){
     const select = document.querySelector('#inlineFormCustomSelectPref')
@@ -221,14 +195,11 @@ function renderAllUsers(users){
     option.className=user.name
     option.innerText = user.name
     option.dataset.id = user.id
-    console.log('option.dataset.id', option.dataset.id)
-    console.log(user)
     select.add(option)
     })
 }
 
 const fetchUser=id=>{
-    console.log(id)
     fetch(`http://localhost:3000/api/v1/users/${id}`)
     .then(res=>res.json())
     .then(user=>{
@@ -240,7 +211,7 @@ const renderUserProfile=user=>{
     profileDiv=document.querySelector('#user-profile')
     profileDiv.innerHTML=`<img id='profile-pic' src='${user.profile_pic}'>
                           <h2 class='display-4' id='profile-name'>${user.name}</h2>`
-
+    profileDiv.dataset.id = user.id
 }
 
 const completeGame=(gTime, pTime)=>{
@@ -248,17 +219,18 @@ const completeGame=(gTime, pTime)=>{
         return `<h7 class='card-text'style="color:green">100% Completed<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
       </svg></h7>`
-    }else return `${Math.round(pTime/(parseInt(gTime)*60)*100)}% completed`
+    }
+    else {
+        return `${Math.round(pTime/(parseInt(gTime)*60)*100)}% completed`
+    }
+}
     
-}
 
-    profileDiv.dataset.id = user.id
-}
 
 function addUserGame(userId, gameId){
-    gameSelector = document.getElementById(`${gameId}`)
-    game = gameSelector.parentNode.parentNode.parentNode
-    gameCardBody = game.querySelector('.card-body')
+    // gameSelector = document.getElementById(`${gameId}`)
+    // game = gameSelector.parentNode.parentNode.parentNode
+    // gameCardBody = game.querySelector('.card-body')
     fetch('http://localhost:3000/api/v1/user_games', {
         method: 'POST',
         headers: {
@@ -280,3 +252,12 @@ function addUserGame(userId, gameId){
         })
 }
 
+function removeUserGame(gameId){
+    gameSelector = document.getElementById(`${gameId}`)
+    gameCard = gameSelector.parentNode.parentNode.parentNode
+    userGameId = gameCard.id
+    fetch(`http://localhost:3000/api/v1/user_games/${userGameId}`, {
+        method: 'DELETE'
+    })
+    gameCard.remove()
+}
