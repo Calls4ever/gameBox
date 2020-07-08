@@ -30,12 +30,12 @@ document.addEventListener('DOMContentLoaded', function(e){
         else if (e.target.matches('#search')){
             e.preventDefault()
             button = e.target
-            search = button.previousElementSibling.value
+            search = button.previousElementSibling.value.toUpperCase()
             gamesContainer = document.querySelector('.container')
             games = gamesContainer.getElementsByClassName('card')
             
             for (let i=0; i<games.length; i++){
-                if (games[i].innerText.indexOf(search) > -1){
+                if (games[i].innerText.toUpperCase().indexOf(search) > -1){
                     games[i].style.display = ''
                 }else{
                     games[i].parentNode.style.display = 'none'
