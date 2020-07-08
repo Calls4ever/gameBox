@@ -123,7 +123,7 @@ function fetchUserGames(userId){
             if(userGame.user_id==userId){
                 console.log(userGame)
             
-                fetchGame(userGame.game_id)
+                fetchGame(userGame.game_id, userGame)
             }
         }
         )
@@ -177,16 +177,16 @@ const showRating=rating=>{
 
 }
 
-const fetchGame=id=>{
+const fetchGame=(id, userGame)=>{
     console.log(id)
     fetch(`http://localhost:3000/api/v1/games/${id}`)
     .then(res=>res.json())
     .then(game=>{
         
-        renderGame(game)
+        renderGame(game,userGame)
     })
 }
-const renderGame=game=>{
+const renderGame=(game, userGame)=>{
     
     const container=document.querySelector('#all-games-container')
     container.innerHTML +=`<div id='all-games-shadow' class="shadow p-3 mb-5 bg-white rounded">
@@ -198,7 +198,12 @@ const renderGame=game=>{
       <h7 class='card-text'>Genre: <p> ${game.genre}</p> </h7>
       <h6 class='card-text' id= "rating-game">Critics Rating: ${showRating(game.rating)}</h6>
       <br>
-      <a id='${game.id}' class="btn btn-primary" style='color: white'>Play Now</a>
+      <h7 class='card-text'>${Math.round(userGame.time_played/(parseInt(game.playtime)*60)*100)}% completed!</h7>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${userGame.time_played}" aria-valuemin="0" aria-valuemax="${parseInt(game.playtime)*60}" style="width: ${userGame.time_played/(parseInt(game.playtime)*60)*100}%"></div>
+        <span class="progress-btn"><button>Add</button> </span></div>
+        <br>
+      <a id='${game.id}' class="btn btn-danger" style='color: white'>Remove Game</a>
       
       <a href="${game.link}" class="btn btn-success float-right" style='color: white'><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
