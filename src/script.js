@@ -3,7 +3,15 @@ document.addEventListener('DOMContentLoaded', function(e){
     
     fetchGames()
     fetchUsers()
-    fetchUserGames(1)
+    document.addEventListener('change', eve=>{
+        
+        if(eve.target.id==='inlineFormCustomSelectPref'){
+            document.querySelector('#all-games-container').innerHTML=''
+            fetchUserGames(eve.target.querySelector(`.${eve.target.value}`).id)
+            fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)
+        }
+    })
+    
     
     
     document.addEventListener('click', function(e){
@@ -71,8 +79,9 @@ function fetchUserGames(userId){
     .then(userGames => {
         userGames.forEach(userGame=>{
             
-            if(userGame.user_id===userId){
-                
+            if(userGame.user_id==userId){
+                console.log(userGame)
+            
                 fetchGame(userGame.game_id)
             }
         }
@@ -132,6 +141,7 @@ const fetchGame=id=>{
     fetch(`http://localhost:3000/api/v1/games/${id}`)
     .then(res=>res.json())
     .then(game=>{
+        
         renderGame(game)
     })
 }
@@ -161,7 +171,24 @@ function renderAllUsers(users){
     const select = document.querySelector('#inlineFormCustomSelectPref')
     users.forEach(user => {
     option = document.createElement('option')
+    option.id=user.id
+    option.className=user.name
     option.innerText = user.name
     select.add(option)
     })
+}
+
+const fetchUser=id=>{
+    console.log(id)
+    fetch(`http://localhost:3000/api/v1/users/${id}`)
+    .then(res=>res.json())
+    .then(user=>{
+        
+        renderUserProfile(user)
+    })
+}
+const renderUserProfile=user=>{
+    profileDiv=document.querySelector('#user-profile')
+    profileDiv.innerHTML=`<img id='profile-pic' src='${user.profile_pic}'>
+                          <h2 class='display-4' id='profile-name'>${user.name}</h2>`
 }
