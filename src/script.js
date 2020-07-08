@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function(e){
     fetchUsers()
     fetchUserGames(1)
     
+    
     document.addEventListener('click', function(e){
         
         if (e.target.matches('.played')){
@@ -48,8 +49,7 @@ function fetchGames(){
     .then(response => response.json())
     .then(games => {
         games.forEach(game => {
-            renderAllGames(game)
-        });
+            renderAllGames(game)});
         })
     .catch((error) => {
         console.log(error); 
@@ -59,7 +59,7 @@ function fetchGames(){
 function fetchUsers(){
     fetch('http://localhost:3000/api/v1/users')
     .then(response => response.json())
-    
+    .then(users => renderAllUsers(users))
     .catch((error) => {
         console.log(error); 
     })
@@ -85,7 +85,7 @@ function fetchUserGames(userId){
 }
 
 const renderAllGames=game=>{
-    
+    // console.log(game)
     const container=document.querySelector('#all-games-container')
     container.innerHTML +=`<div id='all-games-shadow' class="shadow p-3 mb-5 bg-white rounded">
     <div class="card" id='all-game-card' style="width: 18rem; ">
@@ -156,4 +156,12 @@ const renderGame=game=>{
   </div>
   </div` 
   
+}
+function renderAllUsers(users){
+    const select = document.querySelector('#inlineFormCustomSelectPref')
+    users.forEach(user => {
+    option = document.createElement('option')
+    option.innerText = user.name
+    select.add(option)
+    })
 }
