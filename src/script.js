@@ -25,17 +25,9 @@ document.addEventListener('DOMContentLoaded', function(e){
         if (e.target.matches('.btn-primary')){
             e.preventDefault()
             button = e.target
-            console.log(button);
-            
-            // button.parentNode.innerHTML = `
-            //     <form>
-            //         <p>You've played this game!</p>
-            //         <label for="hours">Hours Played:</label>
-            //         <input type="number" id="hours" name="hours">
-            //         <button class="update">Update</button><br>
-            //         <button class="completed">Completed</button>
-            //     </form>    
-            // `
+            userId = document.querySelector('#user-profile').dataset.id 
+            gameId = button.id
+            addUserGame(userId, gameId)
         }
         else if (e.target.matches('.completed')){
             e.preventDefault()
@@ -76,6 +68,17 @@ document.addEventListener('DOMContentLoaded', function(e){
                 }
             }
             button.parentNode.reset()
+        }
+        else if (e.target.matches('#my-collect')){
+            userId = document.querySelector('#user-profile').dataset.id
+            gamesContainer = document.querySelector('.container')
+            gamesContainer.innerHTML = ``
+            fetchUserGames(userId)
+        }
+        else if (e.target.matches('.display-4')){
+            container = document.querySelector('#all-games-container')
+            container.innerHTML = ``
+            fetchGames()
         }
     })
     
@@ -237,6 +240,7 @@ const renderUserProfile=user=>{
     profileDiv=document.querySelector('#user-profile')
     profileDiv.innerHTML=`<img id='profile-pic' src='${user.profile_pic}'>
                           <h2 class='display-4' id='profile-name'>${user.name}</h2>`
+
 }
 
 const completeGame=(gTime, pTime)=>{
@@ -247,3 +251,32 @@ const completeGame=(gTime, pTime)=>{
     }else return `${Math.round(pTime/(parseInt(gTime)*60)*100)}% completed`
     
 }
+
+    profileDiv.dataset.id = user.id
+}
+
+function addUserGame(userId, gameId){
+    gameSelector = document.getElementById(`${gameId}`)
+    game = gameSelector.parentNode.parentNode.parentNode
+    gameCardBody = game.querySelector('.card-body')
+    fetch('http://localhost:3000/api/v1/user_games', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'accepts': 'appplication/json'
+        },
+        body: JSON.stringify({
+            "user_id": userId,
+            "game_id": gameId,
+            "completed": false,
+            "time_played": 0
+        })
+    })
+    .then(response => response.json())
+        .then(userGame => {
+            container = document.querySelector('#all-games-container')
+            container.innerHTML = ``
+            fetchUserGames(userId)
+        })
+}
+
