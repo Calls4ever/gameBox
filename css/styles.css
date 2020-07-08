@@ -48,3 +48,37 @@
     text-align: left;
     color: hsla(198,73%,40%,0.3);
   }
+  .progress-btn{
+    display: flex
+  }
+  /* #progress-btn{
+    padding: 0px;
+    padding-bottom: 2px;
+    font-size: 13px;
+    margin-bottom: 1px;
+    border: none;
+  } */
+  #progress-bar{
+    height: 5px
+  }
+  .rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: center;
+  }
+  .rating > span {
+    display: inline-block;
+    position: relative;
+    width: 1.1em;
+  }
+  .rating > span:hover,
+  .rating > span:hover ~ span {
+    color: transparent;
+  }
+  .rating > span:hover:before,
+  .rating > span:hover ~ span:before {
+     content: "\2605";
+     position: absolute;
+     left: 0; 
+     color: gold;
+  }
