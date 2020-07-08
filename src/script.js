@@ -1,4 +1,6 @@
+
 document.addEventListener('DOMContentLoaded', function(e){
+    
     fetchGames()
     fetchUsers()
     fetchUserGames()
@@ -77,16 +79,42 @@ const renderAllGames=game=>{
     console.log(game)
     const container=document.querySelector('#all-games-container')
     container.innerHTML +=`<div id='all-games-shadow' class="shadow p-3 mb-5 bg-white rounded">
-    <div class="card" id='all-game-card' style="width: 19rem; ">
+    <div class="card" id='all-game-card' style="width: 18rem; ">
     <img src="${game.img_ur}" class="card-img-top" alt="${game.name} Poster">
     <div class="card-body">
-      <h5 class="card-title">${game.name}</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="btn btn-primary">Play Game</a>
+      <h6 class="card-title" style='color: blue'>${game.name}</h6>
+      <h7 class='card-text'>Available on: <p> ${game.platform}</p> </h7>
+      <h7 class='card-text'>Genre: <p> ${game.genre}</p> </h7>
+      <h6 class='card-text' id= "rating-game">Critics Rating: ${showRating(game.rating)}</h6>
+      <br>
+      <a id='${game.id}' class="btn btn-primary" style='color: white'>Play Now</a>
+      
+      <a href="${game.link}" class="btn btn-success float-right" style='color: white'><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+    </svg> Buy</a>
     </div>
   </div>
   </div` 
+  
 }
 
 
+const showRating=rating=>{
+    const rate=parseFloat(rating)
+    
+    if (rate>=4.5) {
+        return `<b><span style="color:#4C9A2A">${rate} </span></b>`
+    }
+    else if(rate<4.5 && rate>=4){
+        return `<b><span style="color: orange ">${rate} </span></b>`
+    }
+    else if(rate<4 && rate>3.5){
+        return `<b><span style="color: 	#FF6347 ">${rate} </span></b>`
+    }
+    else if(rate<3.5 && rate>2){
+        return `<b><span style="color: 		#FF0000 ">${rate} </span></b>`
+    }
+    else return `<b><span style="color: 		#800 ">${rate} </span></b>`
+
+}
 

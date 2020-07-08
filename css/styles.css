@@ -17,8 +17,14 @@
     height: 200px;
     margin-bottom: 1rem;
     overflow: hidden;
-    box-shadow: 5px, 10px black;
+    border-radius: 15%;
+
   }
   #all-games-shadow{
     border-radius: 15%;
+  }
+  .game-rating{
+    background-color:  green ;
+    color:white;
+    padding: 2px;
   }
