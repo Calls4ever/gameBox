@@ -28,3 +28,23 @@
     color:white;
     padding: 2px;
   }
+  #profile-pic{
+    object-fit: cover;
+    object-position: center; /* Center the image within the element */
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    border-radius: 15%;
+  }
+  .profile-container{
+    justify-content: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-bottom:solid grey 2px;
+  }
+  #profile-name{
+
+    text-align: left;
+    color: hsla(198,73%,40%,0.3);
+  }
