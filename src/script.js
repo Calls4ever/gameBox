@@ -77,6 +77,17 @@ document.addEventListener('DOMContentLoaded', function(e){
             }
             button.parentNode.reset()
         }
+        else if (e.target.matches('#my-collect')){
+            userId = document.querySelector('#user-profile').dataset.id
+            gamesContainer = document.querySelector('.container')
+            gamesContainer.innerHTML = ``
+            fetchUserGames(userId)
+        }
+        else if (e.target.matches('.display-4')){
+            container = document.querySelector('#all-games-container')
+            container.innerHTML = ``
+            fetchGames()
+        }
     })
     
 })
@@ -224,4 +235,5 @@ const renderUserProfile=user=>{
     profileDiv=document.querySelector('#user-profile')
     profileDiv.innerHTML=`<img id='profile-pic' src='${user.profile_pic}'>
                           <h2 class='display-4' id='profile-name'>${user.name}</h2>`
+    profileDiv.dataset.id = user.id
 }
