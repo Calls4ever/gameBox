@@ -5,21 +5,29 @@ document.addEventListener('DOMContentLoaded', function(e){
     fetchUsers()
     fetchUserGames()
     
+    // document.querySelector('#inlineFormCustomSelectPref').addEventListener("change", function(e){
+    //     console.log(e.target);
+        
+    // })
+
+
     
     document.addEventListener('click', function(e){
         
-        if (e.target.matches('.played')){
+        if (e.target.matches('.btn-primary')){
             e.preventDefault()
             button = e.target
-            button.parentNode.innerHTML = `
-                <form>
-                    <p>You've played this game!</p>
-                    <label for="hours">Hours Played:</label>
-                    <input type="number" id="hours" name="hours">
-                    <button class="update">Update</button><br>
-                    <button class="completed">Completed</button>
-                </form>    
-            `
+            console.log(button);
+            
+            // button.parentNode.innerHTML = `
+            //     <form>
+            //         <p>You've played this game!</p>
+            //         <label for="hours">Hours Played:</label>
+            //         <input type="number" id="hours" name="hours">
+            //         <button class="update">Update</button><br>
+            //         <button class="completed">Completed</button>
+            //     </form>    
+            // `
         }
         else if (e.target.matches('.completed')){
             e.preventDefault()
@@ -38,6 +46,28 @@ document.addEventListener('DOMContentLoaded', function(e){
             button = e.target
             game = button.parentNode
             updateHours(game)
+        }
+        else if (e.target.matches('#all-games')){
+            container = document.querySelector('#all-games-container')
+            container.innerHTML = ``
+            fetchGames()
+            
+        }
+        else if (e.target.matches('#search')){
+            e.preventDefault()
+            button = e.target
+            search = button.previousElementSibling.value
+            gamesContainer = document.querySelector('.container')
+            games = gamesContainer.getElementsByClassName('card')
+            
+            for (let i=0; i<games.length; i++){
+                if (games[i].innerText.indexOf(search) > -1){
+                    games[i].style.display = ''
+                }else{
+                    games[i].parentNode.style.display = 'none'
+                }
+            }
+            button.parentNode.reset()
         }
     })
     
@@ -123,6 +153,9 @@ function renderAllUsers(users){
     users.forEach(user => {
     option = document.createElement('option')
     option.innerText = user.name
+    option.dataset.id = user.id
+    console.log('option.dataset.id', option.dataset.id)
+    console.log(user)
     select.add(option)
     })
 }
