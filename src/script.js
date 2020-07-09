@@ -208,7 +208,7 @@ const renderGame=(game, userGame)=>{
       
         <div class="progress-bar progress-bar-lg progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${userGame.time_played}" aria-valuemin="0" aria-valuemax="${parseInt(game.playtime)*60}" style="width: ${userGame.time_played/(parseInt(game.playtime)*60)*100}%"></div>
         <span class="progress-btn"><button class='btn btn-outline-success btn-sm' id='progress-btn' data-id='${userGame.id}'></button> </span></div>
-        <h8 class='card-text' style='color: grey'>Spent: ${userGame.time_played} minutes <br> ${game.playtime*60-userGame.time_played} minutes left</h8>
+        ${showPlayTime(parseInt(game.playtime)*60, parseInt(userGame.time_played))}
         <br><br>
       <a id='${game.id}' class="btn btn-danger" style='color: white'>Remove Game</a>
       
@@ -248,8 +248,8 @@ const renderUserProfile=user=>{
 }
 
 const completeGame=(gTime, pTime)=>{
-    if(parseInt(gTime)*60==parseInt(pTime)){
-        return `<h7 class='card-text'style="color:green">100% Completed<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    if(parseInt(gTime)*60<=parseInt(pTime)){
+        return `<h7 class='card-text'style="color:green">100% Completed<svg width="2.5em" height="2em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
       </svg></h7>`
     }
@@ -334,7 +334,8 @@ const rateGame=(id, rate)=>{
               <div class="progress">
                 <div class="progress-bar progress-bar-lg progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${userGame.time_played}" aria-valuemin="0" aria-valuemax="${parseInt(game.playtime)*60}" style="width: ${userGame.time_played/(parseInt(game.playtime)*60)*100}%"></div>
                 <span class="progress-btn"><button class='btn btn-outline-success btn-sm' id='progress-btn' data-id='${userGame.id}'></button> </span></div>
-                <h8 class='card-text' style='color: grey'>Spent: ${userGame.time_played} minutes <br> ${game.playtime*60-userGame.time_played} minutes left</h8>
+                ${showPlayTime(parseInt(game.playtime)*60, parseInt(userGame.time_played))}
+                
                 <br>
                 <br>
               <a id='${game.id}' class="btn btn-danger" style='color: white'>Remove Game</a>
@@ -398,7 +399,7 @@ const renderTime=id=>{
               <div class="progress">
                 <div class="progress-bar progress-bar-lg progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${updatedUserGame.time_played}" aria-valuemin="0" aria-valuemax="${parseInt(game.playtime)*60}" style="width: ${updatedUserGame.time_played/(parseInt(game.playtime)*60)*100}%"></div>
                 <span class="progress-btn"><button class='btn btn-outline-success btn-sm' id='progress-btn' data-id='${updatedUserGame.id}'></button> </span></div>
-                <h8 class='card-text' style='color: grey'>Spent: ${updatedUserGame.time_played} minutes <br> ${game.playtime*60-updatedUserGame.time_played} minutes left</h8>
+                ${showPlayTime(parseInt(game.playtime)*60, parseInt(userGame.time_played))}
                 <br>
                 <br>
               <a id='${game.id}' class="btn btn-danger" style='color: white'>Remove Game</a>
@@ -414,3 +415,20 @@ const renderTime=id=>{
 })
 }
 
+function removeUserGame(gameId){
+    
+    gameSelector = document.getElementById(`${gameId}`)
+    userGameId = gameSelector.dataset.usergameid
+    console.log(gameSelector)
+    fetch(`http://localhost:3000/api/v1/user_games/${userGameId}`, {
+        method: 'DELETE'
+    })
+    gameSelector.remove()
+} 
+
+function showPlayTime(gTime, pTime){
+if(gTime<=pTime){
+    return `<h8 class='card-text' style='color: grey'>Spent: ${pTime} minutes <br> 0 minutes left</h8>`
+}
+else return `<h8 class='card-text' style='color: grey'>Spent: ${pTime} minutes <br> ${gTime-pTime} minutes left</h8>`
+}
