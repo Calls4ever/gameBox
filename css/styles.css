@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    margin-top: 5px;
   }
   #all-game-card{
     margin-bottom: 20px; 
@@ -39,12 +40,12 @@
     justify-content: left;
     margin-left: 10%;
     margin-right: 10%;
-    border-bottom:solid grey 2px;
+    border-bottom:solid #d4ce46 2px;
   }
   #profile-name{
 
     text-align: left;
-    color: hsla(198,73%,40%,0.3);
+    color: #d4ce46;
   }
   .progress-btn{
     display: flex
@@ -80,3 +81,32 @@
      left: 0; 
      color: gold;
   }
+
+  .form-inline{
+    color: #0e5135;
+    text-indent: 10px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  #myBtn {
+    position: fixed;
+    bottom: 30px;
+    float: right;
+    right: 10%;
+    left: 90%;
+    max-width: 100px;
+    width: 100%;
+    font-size: 18px;
+    border-color: rgba(85, 85, 85, 0.2);
+    background-color: #0e5135;
+    padding: .5px;
+    border-radius: 15%;
+    font-weight: bold;
+    opacity: 0.6;
+}
+
+#myBtn:hover {
+    background-color: #d4ce46;;
+}
+   
