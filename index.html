@@ -23,18 +23,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" id="all-games"href="#"> All Games <span class="sr-only">(current)</span></a>
+              <!-- <a class="nav-link" id="all-games"href="#"> All Games <span class="sr-only">(current)</span></a> -->
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="#">   <span class="sr-only">(current)</span></a>
               </li>
             <li class="nav-item">
               <form class="form-inline">
+                <label class="my-1 mr-2" id='all-games' for="inlineFormCustomSelectPref" onmouseover="" style="cursor: pointer;">All Games</label>  
                 <label class="my-1 mr-2" id='my-collect' for="inlineFormCustomSelectPref" onmouseover="" style="cursor: pointer;">My Collection</label>
-                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                  <option selected>Choose...</option>
-                </select>
                 <button class="btn btn-outline-success my-1 mr-2" id="sort" type="submit">Sort</button>
+                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                  <option selected>User Name</option>
+                </select>
+                <label class="my-1 mr-2" id='create-new' for="inlineFormCustomSelectPref" onmouseover="" style="cursor: pointer;">Create New User</label>
               </form>
             </li>
            

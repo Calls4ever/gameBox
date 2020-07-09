@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function(e){
             document.querySelector('#all-games-container').innerHTML=''
             fetchUserGames(eve.target.querySelector(`.${eve.target.value}`).id)
             fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)
+            console.log(eve.target);
+            
         }
     })
     
@@ -91,6 +93,20 @@ document.addEventListener('DOMContentLoaded', function(e){
         else if (e.target.matches('#sort')){
             e.preventDefault()
             sorting()
+        }
+        else if (e.target.matches('#create-new')){
+            newUser = prompt("Please enter your name:")
+            if (newUser == null || newUser == "") {
+                txt = "Cancelled";
+              } else {
+                userImg = prompt("Please enter your profile picture(as URL):")
+                    if (userImg === null || userImg === ""){
+                        txt = "cancelled"
+                    } else {
+                        console.log(newUser, userImg);
+                        createNewUser(newUser, userImg)
+                    }
+              }
         }
     })
     
@@ -393,7 +409,7 @@ function sorting(){
 const renderTime=id=>{
     const card=document.getElementById(`${id}`)
     const userId=card.dataset.usergameid
-    console.log(card)
+    // console.log(card)
     
 
     fetch(`http://localhost:3000/api/v1/games/${id}`)
@@ -461,3 +477,39 @@ function removeUserGame(gameId){
     })
     gameCard.remove()
 } 
+
+function createNewUser(newUser, userImg){
+    fetch('http://localhost:3000/api/v1/users', {
+        method: "POST",
+        headers: {
+            'content-type': 'application/json',
+            'accepts': '/application/json'
+        },
+        body: JSON.stringify({
+            'name': newUser,
+            'profile_pic': userImg
+        })
+    })
+    .then(response => response.json())
+    .then(user => {renderUserProfile(user)
+        container = document.querySelector('#all-games-container')
+        container.innerHTML = ``
+        const select = document.querySelector('#inlineFormCustomSelectPref')
+        option = document.createElement('option')
+        option.id=user.id
+        option.className=user.name
+        option.innerText = user.name
+        option.dataset.id = user.id
+        select.add(option)
+        var options = document.getElementsByClassName("custom-select")[0].options,
+	        name =`${user.name}`;
+
+            for(i = 0; i < options.length; i++){
+            if(options[i].text.indexOf(name) > -1){
+    	    options[i].selected = true;
+            break;
+            }
+}       
+        console.log(option)
+})
+}
