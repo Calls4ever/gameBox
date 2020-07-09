@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function(e){
             document.querySelector('#all-games-container').innerHTML=''
             fetchUserGames(eve.target.querySelector(`.${eve.target.value}`).id)
             fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)
-            console.log(eve.target);
+            
             
         }
     })
@@ -298,11 +298,25 @@ const completeGame=(gTime, pTime)=>{
 
 
 function addUserGame(userId, gameId){
-    fetch('http://localhost:3000/api/v1/user_games', {
+    fetch('http://localhost:3000/api/v1/user_games')
+    .then(res=>res.json())
+    .then(userGames=>{
+
+        let noDuplicate=true
+        userGames.forEach(userGame => {
+            if (userGame.user_id==userId && userGame.game_id==gameId) {
+                window.alert('User has this game in the collection');
+                noDuplicate=false
+                
+            }
+        });
+        
+            if(noDuplicate){
+                fetch('http://localhost:3000/api/v1/user_games', {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
-            'accepts': 'appplication/json'
+            'accepts': 'application/json'
         },
         body: JSON.stringify({
             "user_id": userId,
@@ -315,15 +329,18 @@ function addUserGame(userId, gameId){
         .then(userGame => {
             container = document.querySelector('#all-games-container')
             container.innerHTML = ``
-            fetchUserGames(userId)
+            fetchUserGames(userGame.user_id)
         })
+
+            }
+        
+    })
+    
 }
 
 const rateGame=(id, rate)=>{
     const gameId=id
-    
-    
-    
+
     fetch(`http://localhost:3000/api/v1/games/${gameId}`)
     .then(res=>res.json())
     .then(game=>{
