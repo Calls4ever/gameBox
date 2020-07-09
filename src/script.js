@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function(e){
     
     fetchGames()
     fetchUsers()
+    
     document.addEventListener('change', eve=>{
         
         if(eve.target.id==='inlineFormCustomSelectPref'){
@@ -58,6 +59,10 @@ document.addEventListener('DOMContentLoaded', function(e){
             button = e.target
             gameId = button.id
             removeUserGame(gameId)
+        }
+        else if (e.target.matches('#sort')){
+            e.preventDefault()
+            sorting()
         }
     })
     
@@ -185,7 +190,21 @@ const renderGame=(game, userGame)=>{
     </div>
   </div>
   </div` 
+  function sorting(){
+      divCard = document.getElementsByClassName('shadow')
+      divCard = Array.prototype.slice.call(divCard, 0)
+      divCard.sort(function(a, b) {
+        var aord = +a.id.split('-')[1];
+        var bord = +b.id.split('-')[1];
+        return aord - bord;
+    })
     
+    container.innerHTML = "";
+    
+    for(var i = 0, l = divCard.length; i < l; i++) {
+        container.appendChild(divCard[i]);
+    }}
+  sorting()
 }
 function renderAllUsers(users){
     const select = document.querySelector('#inlineFormCustomSelectPref')
@@ -228,9 +247,6 @@ const completeGame=(gTime, pTime)=>{
 
 
 function addUserGame(userId, gameId){
-    // gameSelector = document.getElementById(`${gameId}`)
-    // game = gameSelector.parentNode.parentNode.parentNode
-    // gameCardBody = game.querySelector('.card-body')
     fetch('http://localhost:3000/api/v1/user_games', {
         method: 'POST',
         headers: {
@@ -260,4 +276,26 @@ function removeUserGame(gameId){
         method: 'DELETE'
     })
     gameCard.remove()
+}
+
+function sorting(){
+    container=document.querySelector('#all-games-container')
+    var divCard = container.children
+    divCard = Array.prototype.slice.call(divCard)
+    divCard.sort(function(a, b) {
+        if (a.textContent < b.textContent) {
+            return -1;
+        } else {
+            return 1;
+        }
+    })
+    // .append(container)
+    container.innerHTML = "";
+      
+    console.log(divCard)
+    for(var i = 0, l = divCard.length; i < l; i++) {
+        container.appendChild(divCard[i]);    
+      }
+  
+  
 }
