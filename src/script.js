@@ -3,12 +3,15 @@ document.addEventListener('DOMContentLoaded', function(e){
     
     fetchGames()
     fetchUsers()
+    
     document.addEventListener('change', eve=>{
         
         if(eve.target.id==='inlineFormCustomSelectPref'){
             document.querySelector('#all-games-container').innerHTML=''
             fetchUserGames(eve.target.querySelector(`.${eve.target.value}`).id)
             fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)
+            console.log(eve.target);
+            
         }
     })
     
@@ -86,6 +89,24 @@ document.addEventListener('DOMContentLoaded', function(e){
             button = e.target
             gameId = button.id
             removeUserGame(gameId)
+        }
+        else if (e.target.matches('#sort')){
+            e.preventDefault()
+            sorting()
+        }
+        else if (e.target.matches('#create-new')){
+            newUser = prompt("Please enter your name:")
+            if (newUser == null || newUser == "") {
+                txt = "Cancelled";
+              } else {
+                userImg = prompt("Please enter your profile picture(as URL):")
+                    if (userImg === null || userImg === ""){
+                        txt = "cancelled"
+                    } else {
+                        console.log(newUser, userImg);
+                        createNewUser(newUser, userImg)
+                    }
+              }
         }
     })
     
@@ -218,7 +239,21 @@ const renderGame=(game, userGame)=>{
     </div>
   </div>
   </div` 
+  function sorting(){
+      divCard = document.getElementsByClassName('shadow')
+      divCard = Array.prototype.slice.call(divCard, 0)
+      divCard.sort(function(a, b) {
+        var aord = +a.id.split('-')[1];
+        var bord = +b.id.split('-')[1];
+        return aord - bord;
+    })
     
+    container.innerHTML = "";
+    
+    for(var i = 0, l = divCard.length; i < l; i++) {
+        container.appendChild(divCard[i]);
+    }}
+  sorting()
 }
 function renderAllUsers(users){
     const select = document.querySelector('#inlineFormCustomSelectPref')
@@ -263,9 +298,6 @@ const completeGame=(gTime, pTime)=>{
 
 
 function addUserGame(userId, gameId){
-    // gameSelector = document.getElementById(`${gameId}`)
-    // game = gameSelector.parentNode.parentNode.parentNode
-    // gameCardBody = game.querySelector('.card-body')
     fetch('http://localhost:3000/api/v1/user_games', {
         method: 'POST',
         headers: {
@@ -350,13 +382,35 @@ const rateGame=(id, rate)=>{
             
      })
     })
-    
+
 }
+
+function sorting(){
+    container=document.querySelector('#all-games-container')
+    var divCard = container.children
+    divCard = Array.prototype.slice.call(divCard)
+    divCard.sort(function(a, b) {
+        if (a.textContent < b.textContent) {
+            return -1;
+        } else {
+            return 1;
+        }
+    })
+    // .append(container)
+    container.innerHTML = "";
+      
+    for(var i = 0, l = divCard.length; i < l; i++) {
+        container.appendChild(divCard[i]);    
+      }
+  
+  
+}
+    
 
 const renderTime=id=>{
     const card=document.getElementById(`${id}`)
     const userId=card.dataset.usergameid
-    console.log(card)
+    // console.log(card)
     
 
     fetch(`http://localhost:3000/api/v1/games/${id}`)
@@ -431,4 +485,41 @@ if(gTime<=pTime){
     return `<h8 class='card-text' style='color: grey'>Spent: ${pTime} minutes <br> 0 minutes left</h8>`
 }
 else return `<h8 class='card-text' style='color: grey'>Spent: ${pTime} minutes <br> ${gTime-pTime} minutes left</h8>`
+   
+} 
+
+function createNewUser(newUser, userImg){
+    fetch('http://localhost:3000/api/v1/users', {
+        method: "POST",
+        headers: {
+            'content-type': 'application/json',
+            'accepts': '/application/json'
+        },
+        body: JSON.stringify({
+            'name': newUser,
+            'profile_pic': userImg
+        })
+    })
+    .then(response => response.json())
+    .then(user => {renderUserProfile(user)
+        container = document.querySelector('#all-games-container')
+        container.innerHTML = ``
+        const select = document.querySelector('#inlineFormCustomSelectPref')
+        option = document.createElement('option')
+        option.id=user.id
+        option.className=user.name
+        option.innerText = user.name
+        option.dataset.id = user.id
+        select.add(option)
+        var options = document.getElementsByClassName("custom-select")[0].options,
+	        name =`${user.name}`;
+
+            for(i = 0; i < options.length; i++){
+            if(options[i].text.indexOf(name) > -1){
+    	    options[i].selected = true;
+            break;
+            }
+}       
+        console.log(option)
+})
 }
