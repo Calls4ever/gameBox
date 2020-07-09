@@ -365,8 +365,7 @@ const rateGame=(id, rate)=>{
             
      })
     })
-<<<<<<< HEAD
-    gameCard.remove()
+
 }
 
 function sorting(){
@@ -383,16 +382,13 @@ function sorting(){
     // .append(container)
     container.innerHTML = "";
       
-    console.log(divCard)
     for(var i = 0, l = divCard.length; i < l; i++) {
         container.appendChild(divCard[i]);    
       }
   
   
 }
-=======
     
-}
 
 const renderTime=id=>{
     const card=document.getElementById(`${id}`)
@@ -456,4 +452,12 @@ const renderTime=id=>{
 })
 }
 
->>>>>>> 0a174b74a165a9ab03ce15236d2f7416bef6e1ba
+function removeUserGame(gameId){
+    gameSelector = document.getElementById(`${gameId}`)
+    gameCard = gameSelector
+    userGameId = gameCard.dataset.usergameid
+    fetch(`http://localhost:3000/api/v1/user_games/${userGameId}`, {
+        method: 'DELETE'
+    })
+    gameCard.remove()
+} 
