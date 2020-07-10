@@ -1,17 +1,20 @@
 
+
 document.addEventListener('DOMContentLoaded', function(e){
     
     fetchGames()
     fetchUsers()
-    
+    fetchGenres()
     document.addEventListener('change', eve=>{
         
         if(eve.target.id==='inlineFormCustomSelectPref'){
             document.querySelector('#all-games-container').innerHTML=''
             fetchUserGames(eve.target.querySelector(`.${eve.target.value}`).id)
-            fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)
+            fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)    
+        } else if (eve.target.id==='inlineFormCustomSelect1') {
+            document.querySelector('#all-games-container').innerHTML=''
             
-            
+            fetchGamesByGenre(eve.target.value)
         }
     })
     
@@ -109,6 +112,8 @@ document.addEventListener('DOMContentLoaded', function(e){
               }
         }
     })
+
+    
     
 })
 
@@ -540,3 +545,39 @@ function createNewUser(newUser, userImg){
         console.log(option)
 })
 }
+const fetchGenres=()=>{
+    fetch('http://localhost:3000/api/v1/genres')
+    .then(res=>res.json())
+    .then(genres=>{
+        
+        genres.forEach(genre=>{
+            
+            renderGenres(genre)
+        })
+
+    })
+        
+}
+ const renderGenres=(genre)=>{
+     
+    const select = document.querySelector('#inlineFormCustomSelect1')
+    
+    option = document.createElement('option')
+    option.id=genre
+    option.innerText = genre
+    select.add(option)
+     
+ }
+ function fetchGamesByGenre(genre){
+     fetch('http://localhost:3000/api/v1/games')
+     .then(res=>res.json())
+     .then(games=>{
+        games.forEach(game=>{
+            game.genre.split(', ').forEach(g=>{
+                if(g===genre){
+                    renderAllGames(game)
+                }
+            })
+        })
+     })
+ }

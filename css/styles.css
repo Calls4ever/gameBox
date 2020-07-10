@@ -80,3 +80,6 @@
      left: 0; 
      color: gold;
   }
+  #genre-select{
+    float: right;
+  }
