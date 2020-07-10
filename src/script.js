@@ -27,12 +27,19 @@ document.addEventListener('DOMContentLoaded', function(e){
             userId = document.querySelector('#user-profile').dataset.id 
             gameId = button.id
             addUserGame(userId, gameId)
+            select = document.querySelector('#search')
+            select.innerText = 'Search'
+            select.parentNode.reset()
         }
         else if (e.target.matches('#all-games')){
             container = document.querySelector('#all-games-container')
             container.innerHTML = ``
             fetchGames()    
             document.querySelector('#sort').innerText = 'Sort A-Z'
+            select = document.querySelector('#search')
+            select.innerText = 'Search'
+            select.parentNode.reset()
+            // console.dir(select)
         }
         else if (e.target.innerText === "Search"){
             e.preventDefault()
