@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function(e){
             document.querySelector('#all-games-container').innerHTML=''
             
             fetchGamesByGenre(eve.target.value)
+            eve.target.value='Choose...'
         }
     })
     
@@ -495,6 +496,7 @@ const renderTime=id=>{
         })
         .then(res=>res.json())
         .then(updatedUserGame=>{
+            
             card.innerHTML=`<div class="card" id='all-game-card' style="width: 18rem; ">
             <img src="${game.img_ur}" class="card-img-top" alt="${game.name} Poster">
             <div class="card-body">
@@ -515,7 +517,7 @@ const renderTime=id=>{
               <div class="progress">
                 <div class="progress-bar progress-bar-lg progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="${updatedUserGame.time_played}" aria-valuemin="0" aria-valuemax="${parseInt(game.playtime)*60}" style="width: ${updatedUserGame.time_played/(parseInt(game.playtime)*60)*100}%"></div>
                 <span class="progress-btn"><button class='btn btn-outline-success btn-sm' id='progress-btn' data-id='${updatedUserGame.id}'></button> </span></div>
-                ${showPlayTime(parseInt(game.playtime)*60, parseInt(userGame.time_played))}
+                ${showPlayTime(parseInt(game.playtime)*60, parseInt(updatedUserGame.time_played))}
                 <br>
                 <br>
               <a id='${game.id}' class="btn btn-danger" style='color: white'>Remove Game</a>
