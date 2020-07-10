@@ -1,6 +1,6 @@
 
   #all-games-container{
-    background-color: white;
+    
     
     display: flex;
     flex-wrap: wrap;
@@ -119,3 +119,9 @@
     background-color: #d4ce46;
 }
    
+#logo{
+  font-family: 'Orbitron', sans-serif; 
+  color: #0e5135;
+  text-shadow:  5px 2px 2px #99931d
+  ;
+}

@@ -226,7 +226,7 @@ const fetchGame=(id, userGame)=>{
 const renderGame=(game, userGame)=>{
     
     const container=document.querySelector('#all-games-container')
-    container.innerHTML +=`<div id='${game.id}' data-userGameId='${userGame.id}' class="shadow p-3 mb-5 bg-white rounded">
+    container.innerHTML +=`<div id='${game.id}' data-userGameId='${userGame.id}' class="shadow p-3 mb-5 bg-white rounded" style='border-radius: 15%'>
     <div class="card" id='all-game-card' style="width: 18rem; ">
     <img src="${game.img_ur}" class="card-img-top" alt="${game.name} Poster">
     <div class="card-body">
