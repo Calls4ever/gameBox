@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function(e){
             fetchGames()    
             document.querySelector('#sort').innerText = 'Sort A-Z'
         }
-        else if (e.target.matches('#search')){
+        else if (e.target.innerText === "Search"){
             e.preventDefault()
             button = e.target
             search = button.previousElementSibling.value.toUpperCase()
@@ -45,8 +45,16 @@ document.addEventListener('DOMContentLoaded', function(e){
                     games[i].parentNode.style.display = 'none'
                 }
             }
-            button.parentNode.reset()
+            button.innerText = "Reset"
             document.querySelector('#sort').innerText = 'Sort A-Z'
+        }
+        else if (e.target.innerText === "Reset"){
+            e.preventDefault()
+            gamesContainer = document.querySelector('.container')
+            gamesContainer.innerHTML = ''
+            fetchGames()
+            button.parentNode.reset()
+            button.innerText = "Search"
         }
         else if (e.target.matches('#my-collect')){
             userId = document.querySelector('#user-profile').dataset.id
@@ -421,7 +429,7 @@ function sorting(){
     var divCard = container.children
     divCard = Array.prototype.slice.call(divCard)
     divCard.sort(function(a, b) {
-        if (a.textContent < b.textContent) {
+        if (a.textContent.toLowerCase() < b.textContent.toLowerCase()) {
             return -1;
         } else {
             return 1;
