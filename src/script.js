@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function(e){
             container = document.querySelector('#all-games-container')
             container.innerHTML = ``
             fetchGames()    
+            document.querySelector('#sort').innerText = 'Sort A-Z'
         }
         else if (e.target.matches('#search')){
             e.preventDefault()
@@ -48,17 +49,20 @@ document.addEventListener('DOMContentLoaded', function(e){
                 }
             }
             button.parentNode.reset()
+            document.querySelector('#sort').innerText = 'Sort A-Z'
         }
         else if (e.target.matches('#my-collect')){
             userId = document.querySelector('#user-profile').dataset.id
             gamesContainer = document.querySelector('.container')
             gamesContainer.innerHTML = ``
             fetchUserGames(userId)
+            document.querySelector('#sort').innerText = 'Sort A-Z'
         }
         else if (e.target.matches('.display-4')){
             container = document.querySelector('#all-games-container')
             container.innerHTML = ``
             fetchGames()
+            document.querySelector('#sort').innerText = 'Sort A-Z'
         }
         else if(e.target.id==='rate-1'){
            
@@ -93,10 +97,19 @@ document.addEventListener('DOMContentLoaded', function(e){
             gameId = button.id
             removeUserGame(gameId)
         }
-        else if (e.target.matches('#sort')){
+        else if (e.target.innerText === "Sort A-Z"){
             e.preventDefault()
             sorting()
+            e.target.innerText = 'Sort Z-A'
         }
+        else if (e.target.innerText === "Sort Z-A"){
+            e.preventDefault()
+            reverseSorting()
+            e.target.innerText = 'Sort A-Z'
+        }
+        // else if (e.target.innerText === "Sort A-Z" || "Sort Z-A"){
+        //     document.querySelector('#sort').innerText = 'Sort A-Z'
+        // }
         else if (e.target.matches('#create-new')){
             newUser = prompt("Please enter your name:")
             if (newUser == null || newUser == "") {
@@ -110,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function(e){
                         createNewUser(newUser, userImg)
                     }
               }
+              document.querySelector('#sort').innerText = 'Sort A-Z'
         }
     })
 
@@ -270,6 +284,7 @@ function renderAllUsers(users){
     option.dataset.id = user.id
     select.add(option)
     })
+    
 }
 
 const fetchUser=id=>{
@@ -283,7 +298,9 @@ const fetchUser=id=>{
 const renderUserProfile=user=>{
     profileDiv=document.querySelector('#user-profile')
     profileDiv.innerHTML=`<img id='profile-pic' src='${user.profile_pic}'>
-                          <h2 class='display-4' id='profile-name'>${user.name}</h2>`
+                          <h2 class='display-4' id='profile-name'>${user.name}</h2>
+
+                          <hr style="border: 2px solid #d4ce46;">`
     profileDiv.dataset.id = user.id
 }
 
@@ -418,14 +435,29 @@ function sorting(){
             return 1;
         }
     })
-    // .append(container)
     container.innerHTML = "";
       
     for(var i = 0, l = divCard.length; i < l; i++) {
         container.appendChild(divCard[i]);    
       }
-  
-  
+}
+
+function reverseSorting(){
+    container=document.querySelector('#all-games-container')
+    var divCard = container.children
+    divCard = Array.prototype.slice.call(divCard)
+    divCard.sort(function(a, b) {
+        if (b.textContent < a.textContent) {
+            return -1;
+        } else {
+            return 1;
+        }
+    })
+    container.innerHTML = "";
+      
+    for(var i = 0, l = divCard.length; i < l; i++) {
+        container.appendChild(divCard[i]);    
+      }
 }
     
 
@@ -542,7 +574,6 @@ function createNewUser(newUser, userImg){
             break;
             }
 }       
-        console.log(option)
 })
 }
 const fetchGenres=()=>{
