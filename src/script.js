@@ -1,17 +1,20 @@
 
+
 document.addEventListener('DOMContentLoaded', function(e){
     
     fetchGames()
     fetchUsers()
-    
+    fetchGenres()
     document.addEventListener('change', eve=>{
         
         if(eve.target.id==='inlineFormCustomSelectPref'){
             document.querySelector('#all-games-container').innerHTML=''
             fetchUserGames(eve.target.querySelector(`.${eve.target.value}`).id)
-            fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)
+            fetchUser(eve.target.querySelector(`.${eve.target.value}`).id)    
+        } else if (eve.target.id==='inlineFormCustomSelect1') {
+            document.querySelector('#all-games-container').innerHTML=''
             
-            
+            fetchGamesByGenre(eve.target.value)
         }
     })
     
@@ -131,6 +134,8 @@ document.addEventListener('DOMContentLoaded', function(e){
               document.querySelector('#sort').innerText = 'Sort A-Z'
         }
     })
+
+    
     
 })
 
@@ -287,6 +292,7 @@ function renderAllUsers(users){
     option.dataset.id = user.id
     select.add(option)
     })
+    
 }
 
 const fetchUser=id=>{
@@ -300,7 +306,9 @@ const fetchUser=id=>{
 const renderUserProfile=user=>{
     profileDiv=document.querySelector('#user-profile')
     profileDiv.innerHTML=`<img id='profile-pic' src='${user.profile_pic}'>
-                          <h2 class='display-4' id='profile-name'>${user.name}</h2>`
+                          <h2 class='display-4' id='profile-name'>${user.name}</h2>
+
+                          <hr style="border: 2px solid #d4ce46;">`
     profileDiv.dataset.id = user.id
 }
 
@@ -576,3 +584,39 @@ function createNewUser(newUser, userImg){
 }       
 })
 }
+const fetchGenres=()=>{
+    fetch('http://localhost:3000/api/v1/genres')
+    .then(res=>res.json())
+    .then(genres=>{
+        
+        genres.forEach(genre=>{
+            
+            renderGenres(genre)
+        })
+
+    })
+        
+}
+ const renderGenres=(genre)=>{
+     
+    const select = document.querySelector('#inlineFormCustomSelect1')
+    
+    option = document.createElement('option')
+    option.id=genre
+    option.innerText = genre
+    select.add(option)
+     
+ }
+ function fetchGamesByGenre(genre){
+     fetch('http://localhost:3000/api/v1/games')
+     .then(res=>res.json())
+     .then(games=>{
+        games.forEach(game=>{
+            game.genre.split(', ').forEach(g=>{
+                if(g===genre){
+                    renderAllGames(game)
+                }
+            })
+        })
+     })
+ }
